@@ -263,3 +263,4 @@ function joiningProtocol(n) {
 }
 
 server.listen(process.env.PORT || 8000);
+console.log("Started")
