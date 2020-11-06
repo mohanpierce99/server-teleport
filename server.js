@@ -17,6 +17,10 @@ function advertise(arr, event, data = null) {
     arr.forEach((x) => x.emit(event, data));
 }
 
+app.get("/",(req,res)=>{
+res.send("Hosted");
+})
+
 
 io.on('connection', socket => {
     console.log("welcoming a socket");
