@@ -31,6 +31,17 @@ io.on('connection', socket => {
 
     socket.cip = ip;
 
+
+    socket.on('generateKey',()=>{
+        if(socket.master && socket.door){
+            let newDoor=joiningProtocol(3);
+            delete wordsToRoom[socket.door];
+            wordsToRoom[newDoor]=socket.id;
+            socket.door=newDoor;
+            socket.emit('roomCreated', newDoor);
+        }
+    })
+
     socket.on('createRoom', ({
         socketId,
         nickname,
@@ -38,10 +49,14 @@ io.on('connection', socket => {
     }) => {
         console.log("nickname entered", nickname)
         if(door){
+            console.log(door);
             if(wordsToRoom[door] !== undefined){
+                console.log("room exists")
+                socket.emit('roomCodeExists');
                 door=joiningProtocol(3);
             }
         }else{
+            console.log("changing");
             door=joiningProtocol(3);
         }
       
@@ -50,13 +65,6 @@ io.on('connection', socket => {
         socket.door = door;
         socket.visible = true;
         moveToMaster(socket.cip, socketId);
-
-
-        //If room exists --> Ask to give new room name
-        if (rooms[socketId]) {
-            socket.emit('roomExists')
-            return
-        }
 
         //Else add to existing list of rooms --> update master socket
         rooms[socketId] = {
@@ -173,13 +181,13 @@ io.on('connection', socket => {
 function leaveMaster(socket, dead = false) {
     const room = rooms[socket.id];
     socket.master = false;
-    socket.door = null;
     if (!dead)
         advertise([socket], 'forceEject');
     advertise(room.peers, 'forceEject')
     delete rooms[socket.id];
     delete wordsToRoom[socket.door];
     moveToSlave(socket.cip, socket.id);
+    socket.door = null;
     var updatedRooms = allMasterRooms(socket);
     traverse("slave", socket.cip, (slave) => {
         if (slave == socket.id && dead) {
