@@ -6,7 +6,6 @@ const socket = require("socket.io")
 const generate = require("./generate")
 const io = socket(server);
 
-//Maintaining the master and slave peer list for ease of access
 const rooms = {}
 
 const wordsToRoom = {};
