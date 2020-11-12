@@ -1,9 +1,9 @@
-const express = require("express")
-const http = require("http")
-const app = express()
-const server = http.createServer(app)
-const socket = require("socket.io")
-const generate = require("./generate")
+const express = require("express");
+const http = require("http");
+const app = express();
+const server = http.createServer(app);
+const socket = require("socket.io");
+const generate = require("./generate");
 const io = socket(server);
 
 const rooms = {}
@@ -22,8 +22,6 @@ res.send("Hosted");
 
 
 io.on('connection', socket => {
-    console.log("welcoming a socket");
-
     const ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address;
 
     moveToSlave(ip, socket.id);
