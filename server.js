@@ -84,6 +84,9 @@ io.on('connection', socket => {
     });
 
     socket.on("rejectPermission",(sockid)=>{
+        console.log("Exiists");
+        console.log("\n");
+        console.log(io.to(sockid));
         io.to(sockid).emit("permissionDenied");
     })
 
