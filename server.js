@@ -83,6 +83,10 @@ io.on('connection', socket => {
         socket.emit('localrooms', allMasterRooms(socket))
     });
 
+    socket.on("rejectPermission",(sockid)=>{
+        io.to(sockid).emit("permissionDenied");
+    })
+
 
     socket.on('leaveRoom', () => {
         if (socket.master) {
