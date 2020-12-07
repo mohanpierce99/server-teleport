@@ -46,7 +46,7 @@ io.on('connection', socket => {
     }) => {
         console.log("nickname entered", nickname)
         if(door){
-            console.log(door);
+            console.log("door",door);
             if(wordsToRoom[door] !== undefined){
                 console.log("room exists")
                 socket.emit('roomCodeExists');
@@ -74,6 +74,8 @@ io.on('connection', socket => {
         traverse("slave", socket.cip, (slave) => {
             io.to(slave).emit('localrooms', updatedRooms);
         })
+
+        console.log("emitting dooor",door);
 
         socket.emit('roomCreated', door);
 
@@ -111,8 +113,8 @@ io.on('connection', socket => {
         if (!sourceSocket) {
             sourceSocket = findKey(roomName);
         }
-        console.log(socket.id);
-        console.log(sourceSocket);
+        console.log('sid',socket.id);
+        console.log('ss',sourceSocket);
 
         //Checking if given room name exists
         if (sourceSocket && rooms[sourceSocket]) {
@@ -220,7 +222,7 @@ function findKey(door) {
 function allMasterRooms(socket) {
     var masterRooms = []
     traverse("master", socket.cip, (master) => {
-        console.log(rooms[master]);
+        console.log('master :',rooms[master]);
         masterRooms.push({
             nickname: rooms[master].nickname,
             sourceSocket: master
