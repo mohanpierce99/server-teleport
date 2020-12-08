@@ -168,8 +168,8 @@ io.on('connection', socket => {
     })
 
     socket.on("visibility",(data) => {
-        if((socket.id in rooms) && (socket.visibile != data)) {
-            socket.visibile = data;
+        if((socket.id in rooms) && (socket.visible != data)) {
+            socket.visible = data;
             if(data) {
                 moveToMaster(socket.cip, socket.id)
             } else {
