@@ -42,7 +42,7 @@ io.on('connection', socket => {
     socket.on('createRoom', ({
         socketId,
         nickname,
-        door
+        door,private
     }) => {
         console.log("nickname entered", nickname)
         if(door){
@@ -60,8 +60,14 @@ io.on('connection', socket => {
         wordsToRoom[door] = socket.id;
         socket.master = true;
         socket.door = door;
-        socket.visible = true;
-        moveToMaster(socket.cip, socketId);
+        if(private){
+            socket.visible=false;
+            moveToSlave(socket.cip,socketId)
+        }else{
+            socket.visible = true;
+            moveToMaster(socket.cip, socketId);
+        }
+   
 
         //Else add to existing list of rooms --> update master socket
         rooms[socketId] = {
