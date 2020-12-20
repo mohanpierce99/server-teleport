@@ -50,11 +50,11 @@ io.on('connection', socket => {
             if(wordsToRoom[door] !== undefined){
                 console.log("room exists")
                 socket.emit('roomCodeExists');
-                door=joiningProtocol(3);
+                door=joiningProtocol(private==true?4:3);
             }
         }else{
             console.log("changing");
-            door=joiningProtocol(3);
+            door=joiningProtocol(private==true?4:3);
         }
       
         wordsToRoom[door] = socket.id;
